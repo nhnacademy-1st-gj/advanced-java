@@ -1,0 +1,78 @@
+void infix_to_postfix(char *infix, char *postfix){
+  StackType s;
+  init(&s);
+  while(*infix != '\0'){
+    if(*infix=='('){
+      push(&s, *infix);
+      infix++;
+    }
+    else if(*infix == ')'){
+      while(peek(&s)!='('){
+        *postifix++ = pop(&s);
+        *postfix++ = ' ';
+      }
+      pop(&s);
+      infix++;
+    }
+    else if(*infix == '+'||*infix == '-'||*infix == '/'||*infix == '*'){
+      while(!is_empty(&s)&&(prec(*infix)<=prex(peek(&s)))){ //prec이 우선순위 검사하는 메서드임 
+        *postifix++ = pop(&s); 
+        //조건 간의 반복문에서 스택의 상태와 스택의 최상위층 문자, infix 배열의 문자의 우선 순위를 계속 비교함. 스택이 비어있지 않고 스택 최상위층의 문자가 인픽스 배열에서 만난 문자보다 우선순위가 크거나 같으면 최상위층에 있는 문자가 먼저 와야함. 스택에 있는 문자를 팝시켜 포스트픽스 배열에 넣는다. 
+        *postfix++ = ' ';
+      }
+      push(&s, *infix);
+      infix++;
+    }
+    else if(*infix >= '0'&& *infix<='9'){ 
+      do{
+        *postfix++ = *infix++;
+      }while((*infix>='0' && *infix<='9')); //반복문을 구현하여 각 인덱스의 수를 차례대로 옮김. 반복문이 끝나고 하나의 수가 끝나면 공백을 넣어줌
+      *postfix++ = ' ';
+    }
+    else
+      isfix++;
+  }while(!is_empty(&s)){
+    *postifix++ = pop(&s);
+    *postfix++ = ' ';
+  }
+  postfix--;
+  *postfix='\0';
+}
+
+typedef int element
+typedef struct{
+  element stack[MAX_STACK_SIZE];
+  int top;
+}StackType;
+
+void init(StackType *s){
+  s->top=-1;
+}
+
+void push(StackType *s, element item){
+  if(is_full(s)){
+    fprintf(stderr,"스택포화");
+    return;
+  }
+  else s->stack[++(s->top)]=item;
+}
+
+element peek(StackType *s){
+  if(is_empty(s)){
+    fprintf(stderr,"스택 공백 에러");
+    exit(1);
+  }
+  else return s->stack[s->top];
+}
+
+element pop(StackType *s){
+  if(is_empty(s)){
+    fprintf(stderr,"스택 공백 에러");
+  }
+  else return s->stack[(s->top)--];
+}
+
+//스택에 남아있는것 모두 꺼내기
+is_empty(StackType *s){
+  return (s->top==-1);
+}

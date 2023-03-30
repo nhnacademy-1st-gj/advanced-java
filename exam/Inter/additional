@@ -1,0 +1,6 @@
+expression ::= plus | minus | variable | number
+plus ::= expression expression '+'
+minus ::= expression expression '-'
+//variable  ::= 'a' | 'b' | 'c' | ... | 'z'
+digit = '0' | '1' | ... '9'
+number ::= digit | digit number
